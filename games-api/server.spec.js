@@ -18,7 +18,10 @@ const mysteryGame = {
 }
 
 describe('GET /', () => {
-    
+    beforeEach(() => {
+
+        return db('games').truncate();
+    });
     it('should return status 200', async () => {
     
         const res = await request(server).get('/');
@@ -43,7 +46,7 @@ describe('GET /', () => {
             expect(res.body).toEqual([]);
         });
 
-        it('should return empty array when no games are listed', async () => {
+        xit('should return empty array when no games are listed', async () => {
             const res = await request(server).get('/games');
     // removed seed data, as at time of writing no other games exist in table
             await Games.remove(0);
@@ -51,6 +54,20 @@ describe('GET /', () => {
             await Games.remove(2);
     // should return an empty array
             expect(res.body).toEqual([]);
+        });
+
+    });
+
+    describe('GET /games by id', () => {
+        beforeEach(() => {
+
+            return db('games').truncate();
+        });
+        it('should return http status 404 for a game not found', async () => {
+            const res = await request(server).get('/games/:id');
+         
+
+            expect(res.status).toBe(404);
         });
 
     });
@@ -64,7 +81,7 @@ describe('POST /games', () => {
 
         return db('games').truncate();
     });
-    it('should post a new game and return status 201', async () => {
+    it('should post a new game', async () => {
         let res = await request(server).post('/games')
             .send(kirby)
    
@@ -78,9 +95,18 @@ describe('POST /games', () => {
         expect(res.status).toBe(201);
     });
 
+    it('should post another game, incrementing automatically', async () => {
+        let res = await request(server).post('/games')
+        .send(kirby)
+        .send({title: 'Crash Bandicoot', genre: 'Platform', releaseYear: 1996})
+
+    expect(res.status).toBe(201);
+    })
+
     it('should return status 422 if game info is missing', async () => {
         let res = await request(server).post('/games')
             .send(mysteryGame)
+
             expect(res.status).toBe(422);
     });
 

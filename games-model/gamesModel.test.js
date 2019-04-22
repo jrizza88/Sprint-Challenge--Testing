@@ -9,7 +9,7 @@ describe('The Games Model', () => {
     });
 
     describe('delete function', () => {
-        it('should delete a games by id', async () => {
+        xit('should delete a games by id', async () => {
             await Games.remove(0);
             await Games.remove(1);
             await Games.remove(2);
@@ -17,6 +17,7 @@ describe('The Games Model', () => {
             const game = await db('games');
             expect(game.id).toBe(undefined);
         });
+
     });
 
 }); 

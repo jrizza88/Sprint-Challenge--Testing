@@ -13,8 +13,27 @@ server.get('/', async (req, res) => {
 
 server.get('/games', async (req, res) => {
     const games = await Games.getAll();
-    // .select('title', 'year', 'release')
+
     res.status(200).json(games)
+});
+
+server.get('/games/:id', async (req, res) => {
+   try{  
+         const games = await Games.getById(req.params.id);
+
+         
+    if(!games){
+        res.status(404).json({message: 'game id does not exist!'})
+    }
+
+  
+
+        res.status(200).json(games)
+    
+
+   } catch (error) {
+    res.status(500).json({message: 'error checking game id'})
+   }
 });
 
 server.post('/games', async (req, res) => {
@@ -22,7 +41,7 @@ server.post('/games', async (req, res) => {
         const newGame = await Games.add(req.body)
 
         res.status(201).json(newGame)
-    
+
     } catch (error){
         res.status(422).json(error)
     }

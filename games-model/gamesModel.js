@@ -3,7 +3,8 @@ const db = require('../data/dbConfig');
 module.exports = {
     add,
     getAll,
-    remove
+    remove,
+    getById
 };
 
 async function add(game) {
@@ -22,4 +23,10 @@ function remove(id) {
 
 function getAll() {
     return db('games');
+}
+
+function getById(id) {
+    return db('games')
+        .where({ id })
+        .first();
 }
