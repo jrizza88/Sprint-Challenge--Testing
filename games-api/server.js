@@ -17,4 +17,16 @@ server.get('/games', async (req, res) => {
     res.status(200).json(games)
 });
 
+server.post('/games', async (req, res) => {
+    try{
+        const newGame = await Games.add(req.body)
+
+        res.status(201).json({newGame})
+    
+    } catch (error){
+        res.status(500).json(error)
+    }
+});
+
+
 module.exports = server;
