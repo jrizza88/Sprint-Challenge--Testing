@@ -8,9 +8,11 @@ exports.up = function(knex, Promise) {
       tbl.string('genre', 255).notNullable();
 
       tbl.integer('releaseYear').notNullable();
+
+
   })
 };
 
 exports.down = function(knex, Promise) {
-  
+  return knex.schema.dropTableIfExists('games')
 };
