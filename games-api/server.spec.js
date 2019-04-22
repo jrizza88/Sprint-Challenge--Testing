@@ -7,10 +7,15 @@ const db = require('../data/dbConfig');
 const request = require('supertest');
 
 const kirby = {
+    id: 4,
     title: "Kirby's Dream Land",
     genre: 'Platform',
     releaseYear: 1992
 };
+
+const mysteryGame = {
+    title: 'missingo strikes again'
+}
 
 describe('GET /', () => {
     
@@ -55,11 +60,28 @@ describe('GET /', () => {
 
 
 describe('POST /games', () => {
+    beforeEach(() => {
+
+        return db('games').truncate();
+    });
     it('should post a new game and return status 201', async () => {
         let res = await request(server).post('/games')
             .send(kirby)
    
+        expect(res.body).toEqual(kirby);
+    });
+
+    it('should return status 201', async () => {
+        let res = await request(server).post('/games')
+            .send(kirby)
+   
         expect(res.status).toBe(201);
+    });
+
+    it('should return status 422 if game info is missing', async () => {
+        let res = await request(server).post('/games')
+            .send(mysteryGame)
+            expect(res.status).toBe(422);
     });
 
 })
